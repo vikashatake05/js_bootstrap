@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplication Tables (No For Loop)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    input, button { margin: 5px; padding: 8px; font-size: 16px; }
+    .table { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Multiplication Tables (No For Loop)</h2>
+  <input type="number" id="start" placeholder="Start number">
+  <input type="number" id="end" placeholder="End number">
+  <input type="number" id="upto" placeholder="Upto (e.g. 10)">
+  <button onclick="generateTables()">Generate Tables</button>
+  <div id="tables"></div>
+
+  <script>
+    function generateTables() {
+      const start = parseInt(document.getElementById('start').value);
+      const end = parseInt(document.getElementById('end').value);
+      const upto = parseInt(document.getElementById('upto').value);
+      const tablesDiv = document.getElementById('tables');
+      tablesDiv.innerHTML = '';
+      if (isNaN(start) || isNaN(end) || isNaN(upto) || start > end || upto < 1) {
+        tablesDiv.textContent = 'Please enter valid start, end, and upto numbers.';
+        return;
+      }
+      createTable(start, end, upto, tablesDiv);
+    }
+
+    function createTable(current, end, upto, parent) {
+      if (current > end) return;
+      const tableDiv = document.createElement('div');
+      tableDiv.className = 'table';
+      tableDiv.innerHTML = `<strong>Table of ${current}</strong><br>`;
+      printTable(current, 1, upto, tableDiv);
+      parent.appendChild(tableDiv);
+      createTable(current + 1, end, upto, parent);
+    }
+
+    function printTable(num, multiplier, upto, parent) {
+      if (multiplier > upto) return;
+      const line = document.createElement('div');
+      line.textContent = `${num} x ${multiplier} = ${num * multiplier}`;
+      parent.appendChild(line);
+      printTable(num, multiplier + 1, upto, parent);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Letter Counter</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    input, button { margin: 5px; padding: 8px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Count Letters in a Word</h2>
+  <input type="text" id="wordInput" placeholder="Enter a word">
+  <button onclick="countLetters()">Count Letters</button>
+  <p id="letterCount"></p>
+
+  <script>
+    function countLetters() {
+      const word = document.getElementById('wordInput').value;
+      // Remove non-letter characters and count only letters
+      const lettersOnly = word.replace(/[^a-zA-Z]/g, '');
+      document.getElementById('letterCount').textContent = 
+        'Number of letters: ' + lettersOnly.length;
+    }
+  </script>
+</body>
+</html>

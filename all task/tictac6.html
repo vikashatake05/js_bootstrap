@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe - Bootstrap 5</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #222; }
+    .game-container { margin-top: 40px; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .cell {
+      width: 80px;
+      height: 80px;
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #fff;
+      background: #444;
+      border: 2px solid #888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cell:hover:not(.disabled) {
+      background: #666;
+    }
+    .disabled {
+      pointer-events: none;
+      background: #222 !important;
+    }
+    #statusMsg {
+      font-size: 1.3em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container game-container text-center">
+    <h2 class="text-light mb-4">Tic Tac Toe</h2>
+    <div id="statusMsg" class="mb-3 text-light">Player X's turn</div>
+    <div id="board" class="board"></div>
+    <button id="resetBtn" class="btn btn-warning">Reset Game</button>
+  </div>
+  <script>
+    let board, currentPlayer, gameOver;
+
+    function initGame() {
+      board = Array(9).fill('');
+      currentPlayer = 'X';
+      gameOver = false;
+      document.getElementById('statusMsg').textContent = "Player X's turn";
+      renderBoard();
+    }
+
+    function renderBoard() {
+      const boardDiv = document.getElementById('board');
+      boardDiv.innerHTML = '';
+      board.forEach((cell, idx) => {
+        const cellDiv = document.createElement('div');
+        cellDiv.className = 'cell' + (cell || gameOver ? ' disabled' : '');
+        cellDiv.textContent = cell;
+        cellDiv.onclick = () => handleMove(idx);
+        boardDiv.appendChild(cellDiv);
+      });
+    }
+
+    function handleMove(idx) {
+      if (board[idx] || gameOver) return;
+      board[idx] = currentPlayer;
+      renderBoard();
+      if (checkWin(currentPlayer)) {
+        document.getElementById('statusMsg').textContent = `🎉 Player ${currentPlayer} wins!`;
+        document.getElementById('statusMsg').className = "mb-3 text-success";
+        gameOver = true;
+        renderBoard();
+      } else if (board.every(cell => cell)) {
+        document.getElementById('statusMsg').textContent = "It's a draw!";
+        document.getElementById('statusMsg').className = "mb-3 text-warning";
+        gameOver = true;
+        renderBoard();
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        document.getElementById('statusMsg').textContent = `Player ${currentPlayer}'s turn`;
+        document.getElementById('statusMsg').className = "mb-3 text-light";
+      }
+    }
+
+    function checkWin(player) {
+      const wins = [
+        [0,1,2],[3,4,5],[6,7,8], // rows
+        [0,3,6],[1,4,7],[2,5,8], // cols
+        [0,4,8],[2,4,6]          // diags
+      ];
+      return wins.some(line => line.every(i => board[i] === player));
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', initGame);
+
+    // Start game on load
+    initGame();
+  </script>
+</body>
+</html>
